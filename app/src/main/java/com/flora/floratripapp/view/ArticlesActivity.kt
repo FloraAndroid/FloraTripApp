@@ -1,18 +1,15 @@
 package com.flora.floratripapp.view
 
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.AttributeSet
-import android.util.Log
 import android.view.View
-import androidx.lifecycle.Observer
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.flora.floratripapp.MyViewModel
 import com.flora.floratripapp.MyViewModelFactory
 import com.flora.floratripapp.R
 import com.flora.floratripapp.network.ServiceBuilder
-import kotlinx.android.synthetic.main.activity_main.*
 
 class ArticlesActivity : AppCompatActivity() {
     lateinit var myViewModel: MyViewModel
@@ -21,11 +18,9 @@ class ArticlesActivity : AppCompatActivity() {
         setContentView(R.layout.activity_articles)
 
         myViewModel = ViewModelProvider(
-                this,
-                MyViewModelFactory(ServiceBuilder)
+            this,
+            MyViewModelFactory(ServiceBuilder)
         )[MyViewModel::class.java]
-
-        myViewModel.loadData()
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
@@ -35,11 +30,14 @@ class ArticlesActivity : AppCompatActivity() {
 
     }
 
+
     override fun onBackPressed() {
-        super.onBackPressed()
+        myViewModel.loading.postValue(null)
         myViewModel.loading.removeObserver {  }
-        finish()
+        this.viewModelStore.clear()
+        this.finish()
     }
+
 
 
     override fun onCreateView(name: String, context: Context, attrs: AttributeSet): View? {

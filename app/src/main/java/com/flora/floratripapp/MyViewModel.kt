@@ -1,6 +1,5 @@
 package com.flora.floratripapp
 
-import android.icu.util.TimeUnit.values
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,7 +10,9 @@ import com.flora.floratripapp.view.model.ViewData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
-import java.time.chrono.JapaneseEra.values
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.*
 
 class MyViewModel(serviceBuilder: ServiceBuilder) : ViewModel() {
 
@@ -28,11 +29,9 @@ class MyViewModel(serviceBuilder: ServiceBuilder) : ViewModel() {
                     var isSaved = if (it.isSaved) R.drawable.ic_saved else R.drawable.ic_save
                     var isLiked = if (it.isLiked) R.drawable.ic_liked else R.drawable.ic_like
                     var count = if (it.isLiked) it.likesCount.toString() else ""
-
-
                     ViewData(
                         it.title, it.imageUrl, it.author.authorAvatar.imageUrl,
-                        it.author.authorName, it.metaData.creationTime,
+                        it.author.authorName, formatDate(it.metaData.creationTime)?:"",
                         isSaved, isLiked, count,
                         it.category, it.id
                     )
@@ -48,9 +47,19 @@ class MyViewModel(serviceBuilder: ServiceBuilder) : ViewModel() {
         }
     }
 
+    private fun formatDate(dateString: String): String? {
+        try {
+            var sd = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
+            val d: Date = sd.parse(dateString)
+            sd = SimpleDateFormat("dd MMM yyyy")
+            return sd.format(d)
+        } catch (e: ParseException) {
+        }
+        return ""
+    }
     override fun onCleared() {
         super.onCleared()
         viewModelScope.cancel()
     }
-    
+
 }

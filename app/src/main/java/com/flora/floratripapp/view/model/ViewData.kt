@@ -6,7 +6,6 @@ import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.flora.floratripapp.R
-import kotlinx.android.extensions.CacheImplementation
 
 
 
@@ -54,6 +53,9 @@ object Companion {
                 is Result.Success -> false
             }
 
+        }
+        if(loadingState==null){
+            isVisible=true
         }
     }
 }

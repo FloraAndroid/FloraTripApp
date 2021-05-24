@@ -78,7 +78,7 @@
             android:paddingRight="@dimen/spacing"
             android:maxLines="5"
             android:text="@{item.title}"
-            android:textSize="18sp"
+            android:textSize="@dimen/title_txt_size"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@id/category_item"
             app:layout_constraintTop_toBottomOf="@id/category_item" />
